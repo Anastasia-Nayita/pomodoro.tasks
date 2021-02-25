@@ -1,4 +1,4 @@
-# what_todo
+# pomodoro_todo
 
 Todo app in flutter
 
