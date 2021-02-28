@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:what_todo/screens/projectpage.dart';
 import 'package:what_todo/widgets.dart';
 
 class Homepage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomepageState extends State<Homepage> {
               bottom: 165,
               right: 20,
               left: 20,
-              child: TaskCardWidget(),
+              child: IntroWidget(),
             ),
             Align(
               alignment: Alignment(0.0, 0.8),
@@ -42,14 +43,22 @@ class _HomepageState extends State<Homepage> {
                 decoration: BoxDecoration(
                   color: Color(0xFFC9B07F),
                 ),
-                child: Text(
-                  'Get Started!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Projectpage()),
+                    );
+                  },
+                  child: Text(
+                    'Get Started!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),

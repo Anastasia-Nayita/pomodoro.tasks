@@ -2,10 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class TaskCardWidget extends StatelessWidget {
+class IntroWidget extends StatelessWidget {
   final String title;
   final String desc;
-  TaskCardWidget({this.title, this.desc});
+
+  IntroWidget({this.title, this.desc});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class TaskCardWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.deepPurple,
+          //  color: Colors.deepPurple,
           width: 4,
         ),
       ),
@@ -49,6 +50,38 @@ class TaskCardWidget extends StatelessWidget {
                 textAlign: TextAlign.center),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProjectCard extends StatelessWidget {
+  final String projTitle;
+  ProjectCard({this.projTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          )
+        ],
+      ),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 40.0,
+      ),
+      child: Text(
+        projTitle ?? "(Unnamed project)",
+        style: TextStyle(
+            color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.w600),
       ),
     );
   }
