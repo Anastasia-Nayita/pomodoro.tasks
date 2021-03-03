@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:what_todo/widgets.dart';
+import 'package:what_todo/screens/homepage.dart';
+import 'package:what_todo/screens/projecttodos.dart';
 
 class Projectpage extends StatefulWidget {
   @override
@@ -18,8 +20,17 @@ class _ProjectpageState extends State<Projectpage> {
               Expanded(
                 child: ListView(
                   children: [
-                    ProjectCard(
-                      projTitle: "Work",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Projecttodos()),
+                        );
+                      },
+                      child: ProjectCard(
+                        projTitle: "Work",
+                      ),
                     ),
                     ProjectCard(
                       projTitle: "Reading list",
@@ -33,15 +44,28 @@ class _ProjectpageState extends State<Projectpage> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: Color(0xFFA7A5A5)),
                 width: double.infinity,
                 child: Row(
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Homepage()),
+                        );
+                      },
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/ArrowLeft.png',
+                        ),
+                      ),
+                    ),
                     Image(
                       image: AssetImage(
                         'assets/images/add.png',
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -18,12 +18,6 @@ class IntroWidget extends StatelessWidget {
       margin: EdgeInsets.only(
         bottom: 8.0,
       ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          //  color: Colors.deepPurple,
-          width: 4,
-        ),
-      ),
       child: Column(
         children: [
           Padding(
