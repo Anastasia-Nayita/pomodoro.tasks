@@ -80,3 +80,19 @@ class ProjectCard extends StatelessWidget {
     );
   }
 }
+
+class TodoWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            child: Image(image: AssetImage('assets/images/')),
+          ),
+          Text('hey i am here'),
+        ],
+      ),
+    );
+  }
+}

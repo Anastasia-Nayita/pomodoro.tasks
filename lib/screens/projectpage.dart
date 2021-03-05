@@ -20,23 +20,11 @@ class _ProjectpageState extends State<Projectpage> {
               Expanded(
                 child: ListView(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Projecttodos()),
-                        );
-                      },
-                      child: ProjectCard(
-                        projTitle: "Work",
-                      ),
+                    ProjectCard(
+                      projTitle: "Work",
                     ),
                     ProjectCard(
                       projTitle: "Reading list",
-                    ),
-                    ProjectCard(
-                      projTitle: "Learn about...",
                     ),
                     ProjectCard(),
                     ProjectCard(),
@@ -44,9 +32,10 @@ class _ProjectpageState extends State<Projectpage> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(color: Color(0xFFA7A5A5)),
+                // decoration: BoxDecoration(color: Color(0xFFA7A5A5)),
                 width: double.infinity,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -61,9 +50,18 @@ class _ProjectpageState extends State<Projectpage> {
                         ),
                       ),
                     ),
-                    Image(
-                      image: AssetImage(
-                        'assets/images/add.png',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Projecttodos()),
+                        );
+                      },
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/add.png',
+                        ),
                       ),
                     ),
                   ],
