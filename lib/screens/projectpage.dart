@@ -18,21 +18,26 @@ class _ProjectpageState extends State<Projectpage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ListView(
-                  children: [
-                    ProjectCard(
-                      projTitle: "Work",
-                    ),
-                    ProjectCard(
-                      projTitle: "Reading list",
-                    ),
-                    ProjectCard(),
-                    ProjectCard(),
-                  ],
+                child: ScrollConfiguration(
+                  behavior: NoScrollGlow(),
+                  child: ListView(
+                    children: [
+                      ProjectCard(
+                        projTitle: "Work",
+                      ),
+                      ProjectCard(
+                        projTitle: "Reading list",
+                      ),
+                      ProjectCard(),
+                      ProjectCard(),
+                      ProjectCard(),
+                      ProjectCard(),
+                      ProjectCard(),
+                    ],
+                  ),
                 ),
               ),
               Container(
-                // decoration: BoxDecoration(color: Color(0xFFA7A5A5)),
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

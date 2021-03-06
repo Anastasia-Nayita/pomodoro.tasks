@@ -51,6 +51,7 @@ class IntroWidget extends StatelessWidget {
 
 class ProjectCard extends StatelessWidget {
   final String projTitle;
+
   ProjectCard({this.projTitle});
 
   @override
@@ -82,17 +83,44 @@ class ProjectCard extends StatelessWidget {
 }
 
 class TodoWidget extends StatelessWidget {
+  final String text;
+  final bool isDone;
+
+  TodoWidget({this.text, this.isDone = false});
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
       child: Row(
         children: [
           Container(
-            child: Image(image: AssetImage('assets/images/')),
+            margin: EdgeInsets.only(
+              right: 16.0,
+            ),
+            child: Image(
+                image: isDone
+                    ? AssetImage('assets/images/CheckCircle.png')
+                    : AssetImage('assets/images/Circle.png')),
           ),
-          Text('hey i am here'),
+          Text(
+            text ?? '(Unnamed Todo)',
+            style: TextStyle(
+              color: isDone ? Colors.white : Colors.white54,
+              fontSize: 16.0,
+              fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+            ),
+          ),
         ],
       ),
     );
+  }
+}
+
+class NoScrollGlow extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
