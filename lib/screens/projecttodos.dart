@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:what_todo/database_helper.dart';
+import 'package:what_todo/models/task.dart';
 import 'package:what_todo/widgets.dart';
 
 class Projecttodos extends StatefulWidget {
@@ -34,6 +36,15 @@ class _ProjecttodosState extends State<Projecttodos> {
                         ),
                         Expanded(
                           child: TextField(
+                            onSubmitted: (value) {
+                              if (value != '') {
+                                DatabaseHelper _dbHelper = DatabaseHelper();
+
+                                Task _newTask = Task(title: value);
+
+                                _dbHelper.insertTask(_newTask);
+                              }
+                            },
                             decoration: InputDecoration(
                               hintText: "Enter Project Title",
                               border: InputBorder.none,
