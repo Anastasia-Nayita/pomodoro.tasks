@@ -3,12 +3,16 @@ import 'package:what_todo/widgets.dart';
 import 'package:what_todo/screens/homepage.dart';
 import 'package:what_todo/screens/projecttodos.dart';
 
+import '../database_helper.dart';
+
 class Projectpage extends StatefulWidget {
   @override
   _ProjectpageState createState() => _ProjectpageState();
 }
 
 class _ProjectpageState extends State<Projectpage> {
+  DatabaseHelper _dbHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,23 +22,20 @@ class _ProjectpageState extends State<Projectpage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ScrollConfiguration(
-                  behavior: NoScrollGlow(),
-                  child: ListView(
-                    children: [
-                      ProjectCard(
-                        projTitle: "Work",
-                      ),
-                      ProjectCard(
-                        projTitle: "Reading list",
-                      ),
-                      ProjectCard(),
-                      ProjectCard(),
-                      ProjectCard(),
-                      ProjectCard(),
-                      ProjectCard(),
-                    ],
-                  ),
+                child: FutureBuilder(
+                  initialData: [],
+                  future: _dbHelper.getTasks(),
+                  builder: (context, snapshot) {
+                    return ScrollConfiguration(
+                      behavior: NoScrollGlow(),
+                      child: ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return ProjectCard(
+                                projTitle: snapshot.data[index].title);
+                          }),
+                    );
+                  },
                 ),
               ),
               Container(
@@ -61,7 +62,9 @@ class _ProjectpageState extends State<Projectpage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Projecttodos()),
-                        );
+                        ).then((value) {
+                          setState(() {});
+                        });
                       },
                       child: Image(
                         image: AssetImage(

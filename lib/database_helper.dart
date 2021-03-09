@@ -25,6 +25,12 @@ class DatabaseHelper {
 
   Future<List<Task>> getTasks() async {
     Database _db = await database();
-    //List<Map<String, dinamic>> taskMap = await _db
+    List<Map<String, dynamic>> taskMap = await _db.query('tasks');
+    return List.generate(taskMap.length, (index) {
+      return Task(
+          id: taskMap[index]['id'],
+          title: taskMap[index]['title'],
+          description: taskMap[index]['description']);
+    });
   }
 }
