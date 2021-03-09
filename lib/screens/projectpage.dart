@@ -31,8 +31,19 @@ class _ProjectpageState extends State<Projectpage> {
                       child: ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return ProjectCard(
-                                projTitle: snapshot.data[index].title);
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Projecttodos(
+                                            task: snapshot.data[index],
+                                          )),
+                                );
+                              },
+                              child: ProjectCard(
+                                  projTitle: snapshot.data[index].title),
+                            );
                           }),
                     );
                   },
@@ -61,7 +72,9 @@ class _ProjectpageState extends State<Projectpage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Projecttodos()),
+                              builder: (context) => Projecttodos(
+                                    task: null,
+                                  )),
                         ).then((value) {
                           setState(() {});
                         });

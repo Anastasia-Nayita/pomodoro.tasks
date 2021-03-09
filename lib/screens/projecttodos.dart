@@ -4,11 +4,26 @@ import 'package:what_todo/models/task.dart';
 import 'package:what_todo/widgets.dart';
 
 class Projecttodos extends StatefulWidget {
+  final Task task;
+
+  Projecttodos({@required this.task});
+
   @override
   _ProjecttodosState createState() => _ProjecttodosState();
 }
 
 class _ProjecttodosState extends State<Projecttodos> {
+  String _taskTitle = "";
+
+  @override
+  void initState() {
+    if (widget.task != null) {
+      _taskTitle = widget.task.title;
+    }
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,15 +51,19 @@ class _ProjecttodosState extends State<Projecttodos> {
                         ),
                         Expanded(
                           child: TextField(
-                            onSubmitted: (value) {
+                            onSubmitted: (value) async {
                               if (value != '') {
-                                DatabaseHelper _dbHelper = DatabaseHelper();
-
-                                Task _newTask = Task(title: value);
-
-                                _dbHelper.insertTask(_newTask);
+                                if (widget.task == null) {
+                                  DatabaseHelper _dbHelper = DatabaseHelper();
+                                  Task _newTask = Task(title: value);
+                                  await _dbHelper.insertTask(_newTask);
+                                } else {
+                                  print("Update the existing task");
+                                }
                               }
                             },
+                            controller: TextEditingController()
+                              ..text = _taskTitle,
                             decoration: InputDecoration(
                               hintText: "Enter Project Title",
                               border: InputBorder.none,
