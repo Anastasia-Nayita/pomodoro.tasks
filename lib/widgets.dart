@@ -50,9 +50,9 @@ class IntroWidget extends StatelessWidget {
 }
 
 class ProjectCard extends StatelessWidget {
-  final String projTitle;
+  final String title;
 
-  ProjectCard({this.projTitle});
+  ProjectCard({this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class ProjectCard extends StatelessWidget {
         vertical: 40.0,
       ),
       child: Text(
-        projTitle ?? "(Unnamed project)",
+        title ?? "(Unnamed project)",
         style: TextStyle(
             color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.w600),
       ),

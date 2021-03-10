@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:what_todo/database_helper.dart';
 import 'package:what_todo/models/task.dart';
+import 'package:what_todo/models/todo.dart';
 import 'package:what_todo/widgets.dart';
 
 class Projecttodos extends StatefulWidget {
@@ -13,12 +14,16 @@ class Projecttodos extends StatefulWidget {
 }
 
 class _ProjecttodosState extends State<Projecttodos> {
+  DatabaseHelper _dbHelper = DatabaseHelper();
+
+  int _taskId = 0;
   String _taskTitle = "";
 
   @override
   void initState() {
     if (widget.task != null) {
       _taskTitle = widget.task.title;
+      _taskId = widget.task.id;
     }
 
     super.initState();
@@ -54,7 +59,6 @@ class _ProjecttodosState extends State<Projecttodos> {
                             onSubmitted: (value) async {
                               if (value != '') {
                                 if (widget.task == null) {
-                                  DatabaseHelper _dbHelper = DatabaseHelper();
                                   Task _newTask = Task(title: value);
                                   await _dbHelper.insertTask(_newTask);
                                 } else {
@@ -93,27 +97,77 @@ class _ProjecttodosState extends State<Projecttodos> {
                       ),
                     ),
                   ),
-                  TodoWidget(text: 'create prototype', isDone: true),
-                  TodoWidget(),
-                  TodoWidget(),
-                  TodoWidget(text: 'read the article', isDone: true),
+
+                  // TodoWidget(text: 'create prototype', isDone: true),
+
+                  FutureBuilder(
+                    initialData: [],
+                    future: _dbHelper.getTodo(_taskId),
+                    builder: (context, snapshot) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {},
+                              child: TodoWidget(
+                                text: snapshot.data[index].title,
+                                isDone: snapshot.data[index].isDone == 0
+                                    ? false
+                                    : true,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            right: 16.0,
+                          ),
+                          child: Image(
+                              image: AssetImage('assets/images/Circle.png')),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            onSubmitted: (value) async {
+                              if (value != '') {
+                                if (widget.task != null) {
+                                  DatabaseHelper _dbHelper = DatabaseHelper();
+                                  Todo _newTodo = Todo(
+                                    title: value,
+                                    isDone: 0,
+                                    taskId: widget.task.id,
+                                  );
+                                  await _dbHelper.insertTodo(_newTodo);
+                                  setState(() {});
+                                } else {
+                                  print('task is not added');
+                                }
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Add ToDo item",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Container(
-                  child: GestureDetector(
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => Projecttodos()),
-                    //   );
-                    // },
-                    child: Image(
-                      image: AssetImage(
-                        'assets/images/delete.png',
-                      ),
+                  child: Image(
+                    image: AssetImage(
+                      'assets/images/delete.png',
                     ),
                   ),
                 ),

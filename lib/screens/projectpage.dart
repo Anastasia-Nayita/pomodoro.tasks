@@ -42,7 +42,7 @@ class _ProjectpageState extends State<Projectpage> {
                                 );
                               },
                               child: ProjectCard(
-                                  projTitle: snapshot.data[index].title),
+                                  title: snapshot.data[index].title),
                             );
                           }),
                     );
