@@ -19,14 +19,33 @@ class _ProjecttodosState extends State<Projecttodos> {
   int _taskId = 0;
   String _taskTitle = "";
 
+  FocusNode _titleFocus;
+  FocusNode _descriptionFocus;
+  FocusNode _todoFocus;
+
+  bool _contentVisible = false;
+
   @override
   void initState() {
     if (widget.task != null) {
+      _contentVisible = true;
       _taskTitle = widget.task.title;
       _taskId = widget.task.id;
     }
 
+    _titleFocus = FocusNode();
+    _descriptionFocus = FocusNode();
+    _todoFocus = FocusNode();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _titleFocus.dispose();
+    _descriptionFocus.dispose();
+    _todoFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,6 +75,7 @@ class _ProjecttodosState extends State<Projecttodos> {
                         ),
                         Expanded(
                           child: TextField(
+                            focusNode: _titleFocus,
                             onSubmitted: (value) async {
                               if (value != '') {
                                 if (widget.task == null) {
@@ -64,6 +84,7 @@ class _ProjecttodosState extends State<Projecttodos> {
                                 } else {
                                   print("Update the existing task");
                                 }
+                                _descriptionFocus.requestFocus();
                               }
                             },
                             controller: TextEditingController()
@@ -82,24 +103,28 @@ class _ProjecttodosState extends State<Projecttodos> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Add description",
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20.0,
+                  Visibility(
+                    visible: _contentVisible,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: TextField(
+                        focusNode: _descriptionFocus,
+                        onSubmitted: (value) {
+                          _todoFocus.requestFocus();
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Add description",
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                          ),
                         ),
-                      ),
-                      style: TextStyle(
-                        color: Colors.white,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-
-                  // TodoWidget(text: 'create prototype', isDone: true),
-
                   FutureBuilder(
                     initialData: [],
                     future: _dbHelper.getTodo(_taskId),
@@ -122,52 +147,59 @@ class _ProjecttodosState extends State<Projecttodos> {
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            right: 16.0,
+                  Visibility(
+                    visible: _contentVisible,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              right: 16.0,
+                            ),
+                            child: Image(
+                                image: AssetImage('assets/images/Circle.png')),
                           ),
-                          child: Image(
-                              image: AssetImage('assets/images/Circle.png')),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            onSubmitted: (value) async {
-                              if (value != '') {
-                                if (widget.task != null) {
-                                  DatabaseHelper _dbHelper = DatabaseHelper();
-                                  Todo _newTodo = Todo(
-                                    title: value,
-                                    isDone: 0,
-                                    taskId: widget.task.id,
-                                  );
-                                  await _dbHelper.insertTodo(_newTodo);
-                                  setState(() {});
-                                } else {
-                                  print('task is not added');
+                          Expanded(
+                            child: TextField(
+                              focusNode: _todoFocus,
+                              onSubmitted: (value) async {
+                                if (value != '') {
+                                  if (widget.task != null) {
+                                    DatabaseHelper _dbHelper = DatabaseHelper();
+                                    Todo _newTodo = Todo(
+                                      title: value,
+                                      isDone: 0,
+                                      taskId: widget.task.id,
+                                    );
+                                    await _dbHelper.insertTodo(_newTodo);
+                                    setState(() {});
+                                  } else {
+                                    print('task is not added');
+                                  }
                                 }
-                              }
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Add ToDo item",
-                              border: InputBorder.none,
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Add ToDo item",
+                                border: InputBorder.none,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-              Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Container(
-                  child: Image(
-                    image: AssetImage(
-                      'assets/images/delete.png',
+              Visibility(
+                visible: _contentVisible,
+                child: Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: Container(
+                    child: Image(
+                      image: AssetImage(
+                        'assets/images/delete.png',
+                      ),
                     ),
                   ),
                 ),
