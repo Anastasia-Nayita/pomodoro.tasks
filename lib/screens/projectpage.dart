@@ -39,7 +39,9 @@ class _ProjectpageState extends State<Projectpage> {
                                       builder: (context) => Projecttodos(
                                             task: snapshot.data[index],
                                           )),
-                                );
+                                ).then((value) {
+                                  setState(() {});
+                                });
                               },
                               child: ProjectCard(
                                   title: snapshot.data[index].title),

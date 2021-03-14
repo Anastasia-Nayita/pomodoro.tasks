@@ -80,9 +80,16 @@ class _ProjecttodosState extends State<Projecttodos> {
                               if (value != '') {
                                 if (widget.task == null) {
                                   Task _newTask = Task(title: value);
-                                  await _dbHelper.insertTask(_newTask);
+                                  _taskId =
+                                      await _dbHelper.insertTask(_newTask);
+                                  setState(() {
+                                    _contentVisible = true;
+                                    _taskTitle = value;
+                                  });
                                 } else {
-                                  print("Update the existing task");
+                                  await _dbHelper.updateTaskTitle(
+                                      _taskId, value);
+                                  print("Updated the existing task");
                                 }
                                 _descriptionFocus.requestFocus();
                               }
