@@ -103,12 +103,14 @@ class TodoWidget extends StatelessWidget {
                     ? AssetImage('assets/images/CheckCircle.png')
                     : AssetImage('assets/images/Circle.png')),
           ),
-          Text(
-            text ?? '(Unnamed Todo)',
-            style: TextStyle(
-              color: isDone ? Colors.white : Colors.white54,
-              fontSize: 16.0,
-              fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+          Flexible(
+            child: Text(
+              text ?? '(Unnamed Todo)',
+              style: TextStyle(
+                color: isDone ? Colors.white : Colors.white54,
+                fontSize: 16.0,
+                fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
           ),
         ],

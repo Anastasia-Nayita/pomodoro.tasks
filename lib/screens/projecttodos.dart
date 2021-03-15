@@ -20,7 +20,6 @@ class _ProjecttodosState extends State<Projecttodos> {
   String _taskTitle = "";
 
   FocusNode _titleFocus;
-  FocusNode _descriptionFocus;
   FocusNode _todoFocus;
 
   bool _contentVisible = false;
@@ -34,7 +33,6 @@ class _ProjecttodosState extends State<Projecttodos> {
     }
 
     _titleFocus = FocusNode();
-    _descriptionFocus = FocusNode();
     _todoFocus = FocusNode();
 
     super.initState();
@@ -43,7 +41,6 @@ class _ProjecttodosState extends State<Projecttodos> {
   @override
   void dispose() {
     _titleFocus.dispose();
-    _descriptionFocus.dispose();
     _todoFocus.dispose();
     super.dispose();
   }
@@ -91,7 +88,7 @@ class _ProjecttodosState extends State<Projecttodos> {
                                       _taskId, value);
                                   print("Updated the existing task");
                                 }
-                                _descriptionFocus.requestFocus();
+                                _todoFocus.requestFocus();
                               }
                             },
                             controller: TextEditingController()
@@ -110,28 +107,34 @@ class _ProjecttodosState extends State<Projecttodos> {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: _contentVisible,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      child: TextField(
-                        focusNode: _descriptionFocus,
-                        onSubmitted: (value) {
-                          _todoFocus.requestFocus();
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Add description",
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20.0,
-                          ),
-                        ),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Visibility(
+                  //   visible: _contentVisible,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(bottom: 15.0),
+                  //     child: TextField(
+                  //       focusNode: _descriptionFocus,
+                  //       onSubmitted: (value) {
+                  //         if (value != '') {
+                  //           if (_taskId != 0) {
+                  //             _dbHelper.updateTaskDescription(_taskId, value);
+                  //           }
+                  //         }
+                  //         _todoFocus.requestFocus();
+                  //       },
+                  //       decoration: InputDecoration(
+                  //         hintText: "Add description",
+                  //         border: InputBorder.none,
+                  //         contentPadding: EdgeInsets.symmetric(
+                  //           horizontal: 20.0,
+                  //         ),
+                  //       ),
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
                   FutureBuilder(
                     initialData: [],
                     future: _dbHelper.getTodo(_taskId),
@@ -141,7 +144,16 @@ class _ProjecttodosState extends State<Projecttodos> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: () {},
+                              onTap: () async {
+                                if (snapshot.data[index].isDone == 0) {
+                                  await _dbHelper.updateTodoDone(
+                                      snapshot.data[index].id, 1);
+                                } else {
+                                  await _dbHelper.updateTodoDone(
+                                      snapshot.data[index].id, 0);
+                                }
+                                setState(() {});
+                              },
                               child: TodoWidget(
                                 text: snapshot.data[index].title,
                                 isDone: snapshot.data[index].isDone == 0
