@@ -182,17 +182,19 @@ class _ProjecttodosState extends State<Projecttodos> {
                           Expanded(
                             child: TextField(
                               focusNode: _todoFocus,
+                              controller: TextEditingController()..text = "",
                               onSubmitted: (value) async {
                                 if (value != '') {
-                                  if (widget.task != null) {
+                                  if (_taskId != null) {
                                     DatabaseHelper _dbHelper = DatabaseHelper();
                                     Todo _newTodo = Todo(
                                       title: value,
                                       isDone: 0,
-                                      taskId: widget.task.id,
+                                      taskId: _taskId,
                                     );
                                     await _dbHelper.insertTodo(_newTodo);
                                     setState(() {});
+                                    _todoFocus.requestFocus();
                                   } else {
                                     print('task is not added');
                                   }
@@ -214,10 +216,18 @@ class _ProjecttodosState extends State<Projecttodos> {
                 visible: _contentVisible,
                 child: Align(
                   alignment: FractionalOffset.bottomCenter,
-                  child: Container(
-                    child: Image(
-                      image: AssetImage(
-                        'assets/images/delete.png',
+                  child: GestureDetector(
+                    onTap: () async {
+                      if (_taskId != 0) {
+                        await _dbHelper.deleteTask(_taskId);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/delete.png',
+                        ),
                       ),
                     ),
                   ),

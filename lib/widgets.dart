@@ -107,9 +107,11 @@ class TodoWidget extends StatelessWidget {
             child: Text(
               text ?? '(Unnamed Todo)',
               style: TextStyle(
-                color: isDone ? Colors.white : Colors.white54,
+                color: isDone ? Colors.white54 : Colors.white,
                 fontSize: 16.0,
-                fontWeight: isDone ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: isDone ? FontWeight.w300 : FontWeight.w600,
+                decoration:
+                    isDone ? TextDecoration.lineThrough : TextDecoration.none,
               ),
             ),
           ),
