@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class IntroWidget extends StatelessWidget {
@@ -56,15 +58,30 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color generateRandomColor() {
+      const colorsList = [
+        Color(0xFF845EC2),
+        Color(0xFFD65DB1),
+        Color(0xFFFF6F91)
+      ];
+      Random random = Random();
+      print(colorsList[random.nextInt(colorsList.length)]);
+      return colorsList[random.nextInt(colorsList.length)];
+    }
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        ),
+        color: generateRandomColor(),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
-            spreadRadius: 5,
+            spreadRadius: 6,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: Offset(0, 4),
           )
         ],
       ),

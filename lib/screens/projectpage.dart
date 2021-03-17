@@ -31,24 +31,34 @@ class _ProjectpageState extends State<Projectpage> {
                       child: ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Projecttodos(
+                            return Align(
+                              alignment: Alignment.topCenter,
+                              heightFactor: 0.8,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Future.delayed(
+                                    Duration(milliseconds: 500),
+                                    () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Projecttodos(
                                             task: snapshot.data[index],
-                                          )),
-                                ).then(
-                                  (value) {
-                                    setState(() {});
-                                  },
-                                );
-                              },
-                              child: ProjectCard(
-                                title: snapshot.data[index].title,
+                                          ),
+                                        ),
+                                      ).then(
+                                        (value) {
+                                          setState(() {});
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                child: ProjectCard(
+                                  title: snapshot.data[index].title,
 
-                                // desc: snapshot.data[index].description,
+                                  // desc: snapshot.data[index].description,
+                                ),
                               ),
                             );
                           }),

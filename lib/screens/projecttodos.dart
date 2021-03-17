@@ -103,10 +103,11 @@ class _ProjecttodosState extends State<Projecttodos> {
                               color: Colors.white,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
+
                   // Visibility(
                   //   visible: _contentVisible,
                   //   child: Padding(
