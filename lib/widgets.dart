@@ -60,12 +60,21 @@ class ProjectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color generateRandomColor() {
       const colorsList = [
+        Color(0xFFF2F3CC),
+        Color(0xFFEECCDC),
+        Color(0xFFFF7C58),
+        Color(0xFF6C97B5),
+        Color(0xFF005B4C),
+        Color(0xFF005C78),
+        Color(0xFF00C9B0),
+        Color(0xFFCEF6FF),
+        Color(0xFFB1B5A7),
+        Color(0xFFBD9744),
         Color(0xFF845EC2),
         Color(0xFFD65DB1),
         Color(0xFFFF6F91)
       ];
       Random random = Random();
-      print(colorsList[random.nextInt(colorsList.length)]);
       return colorsList[random.nextInt(colorsList.length)];
     }
 
@@ -78,7 +87,7 @@ class ProjectCard extends StatelessWidget {
         color: generateRandomColor(),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Colors.black45,
             spreadRadius: 6,
             blurRadius: 7,
             offset: Offset(0, 4),
@@ -94,6 +103,45 @@ class ProjectCard extends StatelessWidget {
         title ?? "(Unnamed project)",
         style: TextStyle(
             color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+}
+
+class ColorPicker extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Material(
+        color: Colors.transparent,
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            height: 250.0,
+            width: 200.0,
+            color: Colors.white,
+            child: Container(
+              margin: EdgeInsets.all(50.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.redAccent,
+                  width: 3,
+                ),
+              ),
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: List.generate(10, (index) {
+                  return Center(
+                    child: Text(
+                      'item $index',
+                      // style: Theme.of(context).textTheme.headline5,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

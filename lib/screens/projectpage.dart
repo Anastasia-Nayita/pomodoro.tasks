@@ -56,8 +56,6 @@ class _ProjectpageState extends State<Projectpage> {
                                 },
                                 child: ProjectCard(
                                   title: snapshot.data[index].title,
-
-                                  // desc: snapshot.data[index].description,
                                 ),
                               ),
                             );

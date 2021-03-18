@@ -107,35 +107,10 @@ class _ProjecttodosState extends State<Projecttodos> {
                       ],
                     ),
                   ),
-
-                  // Visibility(
-                  //   visible: _contentVisible,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(bottom: 15.0),
-                  //     child: TextField(
-                  //       focusNode: _descriptionFocus,
-                  //       onSubmitted: (value) {
-                  //         if (value != '') {
-                  //           if (_taskId != 0) {
-                  //             _dbHelper.updateTaskDescription(_taskId, value);
-                  //           }
-                  //         }
-                  //         _todoFocus.requestFocus();
-                  //       },
-                  //       decoration: InputDecoration(
-                  //         hintText: "Add description",
-                  //         border: InputBorder.none,
-                  //         contentPadding: EdgeInsets.symmetric(
-                  //           horizontal: 20.0,
-                  //         ),
-                  //       ),
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: ColorPicker(),
+                  ),
                   FutureBuilder(
                     initialData: [],
                     future: _dbHelper.getTodo(_taskId),
