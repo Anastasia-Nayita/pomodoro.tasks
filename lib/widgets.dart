@@ -108,41 +108,71 @@ class ProjectCard extends StatelessWidget {
   }
 }
 
-class ColorPicker extends StatelessWidget {
+class ColorPicker extends StatefulWidget {
+  @override
+  _ColorPickerState createState() => _ColorPickerState();
+}
+
+class _ColorPickerState extends State<ColorPicker> {
+  final List<Color> colors = [
+    Color(0xFFB1B5A7),
+    Color(0xFFF2F3CC),
+    Color(0xFFEECCDC),
+    Color(0xFFBD9744),
+    Color(0xFFFF7C58),
+    Color(0xFFCEF6FF),
+    Color(0xFF6C97B5),
+    Color(0xFF00C9B0),
+    Color(0xFF005B4C),
+    Color(0xFF005C78),
+    Color(0xFF845EC2),
+    Color(0xFFD65DB1),
+    Color(0xFFFF6F91)
+  ];
+  void _selectColors(Offset touchPosition) {
+    final int colorCount = colors.length;
+    final RenderBox renderBox = context.findRenderObject();
+    final double blobDiameter = renderBox.size.height;
+    final double blobRadius = blobDiameter / 2;
+    final double separatorBlob =
+        (renderBox.size.width - (colorCount * blobDiameter)) / (colorCount - 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanDown: (DragDownDetails details) {
+        _selectColors(details.localPosition);
+      },
+      // onHorizontalDragUpdate: (DragDownDetails details) {
+      //   _selectColors(details.localPosition);
+      // },
+      child: ColorBar(
+        colors: colors,
+      ),
+    );
+  }
+}
+
+class ColorBar extends StatelessWidget {
+  const ColorBar({
+    Key key,
+    @required this.colors,
+  }) : super(key: key);
+
+  final List<Color> colors;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Material(
-        color: Colors.transparent,
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            height: 250.0,
-            width: 200.0,
-            color: Colors.white,
-            child: Container(
-              margin: EdgeInsets.all(50.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.redAccent,
-                  width: 3,
-                ),
-              ),
-              child: GridView.count(
-                crossAxisCount: 2,
-                children: List.generate(10, (index) {
-                  return Center(
-                    child: Text(
-                      'item $index',
-                      // style: Theme.of(context).textTheme.headline5,
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ),
+      width: double.infinity,
+      height: 30.0,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
         ),
       ),
+      child: SizedBox(),
     );
   }
 }
