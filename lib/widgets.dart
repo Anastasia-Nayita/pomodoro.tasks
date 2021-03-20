@@ -58,33 +58,13 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color generateRandomColor() {
-      const colorsList = [
-        Color(0xFFF2F3CC),
-        Color(0xFFEECCDC),
-        Color(0xFFFF7C58),
-        Color(0xFF6C97B5),
-        Color(0xFF005B4C),
-        Color(0xFF005C78),
-        Color(0xFF00C9B0),
-        Color(0xFFCEF6FF),
-        Color(0xFFB1B5A7),
-        Color(0xFFBD9744),
-        Color(0xFF845EC2),
-        Color(0xFFD65DB1),
-        Color(0xFFFF6F91)
-      ];
-      Random random = Random();
-      return colorsList[random.nextInt(colorsList.length)];
-    }
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(15.0),
           topRight: Radius.circular(15.0),
         ),
-        color: generateRandomColor(),
+        // color: generateRandomColor(),
         boxShadow: [
           BoxShadow(
             color: Colors.black45,
@@ -129,6 +109,7 @@ class _ColorPickerState extends State<ColorPicker> {
     Color(0xFFD65DB1),
     Color(0xFFFF6F91)
   ];
+
   void _selectColors(Offset touchPosition) {
     final int colorCount = colors.length;
     final RenderBox renderBox = context.findRenderObject();
@@ -136,6 +117,27 @@ class _ColorPickerState extends State<ColorPicker> {
     final double blobRadius = blobDiameter / 2;
     final double separatorBlob =
         (renderBox.size.width - (colorCount * blobDiameter)) / (colorCount - 1);
+
+    final double touchX =
+        touchPosition.dx.clamp(0.0, renderBox.size.width.toDouble());
+
+    final double fractionalTouchPosition =
+        ((touchX - blobRadius) / (blobDiameter + separatorBlob))
+            .clamp(0.0, (colorCount - 1).toDouble());
+
+    final int leftColorIndex = fractionalTouchPosition.floor();
+    final Color leftSelectableColor = colors[leftColorIndex];
+
+    final int rightColorIndex = fractionalTouchPosition.ceil();
+    final Color rightSelectableColor = colors[rightColorIndex];
+
+    final Color selectedColor =
+        (fractionalTouchPosition - leftColorIndex) <= 0.5
+            ? leftSelectableColor
+            : rightSelectableColor;
+
+    final Color spectrumColor = Color.lerp(leftSelectableColor.color,
+        rightSelectableColor.color, fractionalTouchPosition - leftColorIndex);
   }
 
   @override
@@ -144,9 +146,9 @@ class _ColorPickerState extends State<ColorPicker> {
       onPanDown: (DragDownDetails details) {
         _selectColors(details.localPosition);
       },
-      // onHorizontalDragUpdate: (DragDownDetails details) {
-      //   _selectColors(details.localPosition);
-      // },
+      onHorizontalDragUpdate: (DragUpdateDetails details) {
+        _selectColors(details.localPosition);
+      },
       child: ColorBar(
         colors: colors,
       ),
