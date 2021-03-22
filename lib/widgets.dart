@@ -89,12 +89,15 @@ class ProjectCard extends StatelessWidget {
 }
 
 class ColorPicker extends StatefulWidget {
+
+  final Function(Color spectrumColor, Color selectedColor)
+
   @override
   _ColorPickerState createState() => _ColorPickerState();
 }
 
 class _ColorPickerState extends State<ColorPicker> {
-  final List<Color> colors = [
+  final List<Color> paletteColors = [
     Color(0xFFB1B5A7),
     Color(0xFFF2F3CC),
     Color(0xFFEECCDC),
@@ -111,7 +114,7 @@ class _ColorPickerState extends State<ColorPicker> {
   ];
 
   void _selectColors(Offset touchPosition) {
-    final int colorCount = colors.length;
+    final int colorCount = paletteColors.length;
     final RenderBox renderBox = context.findRenderObject();
     final double blobDiameter = renderBox.size.height;
     final double blobRadius = blobDiameter / 2;
@@ -126,18 +129,18 @@ class _ColorPickerState extends State<ColorPicker> {
             .clamp(0.0, (colorCount - 1).toDouble());
 
     final int leftColorIndex = fractionalTouchPosition.floor();
-    final Color leftSelectableColor = colors[leftColorIndex];
+    final Color leftSelectableColor = paletteColors[leftColorIndex];
 
     final int rightColorIndex = fractionalTouchPosition.ceil();
-    final Color rightSelectableColor = colors[rightColorIndex];
+    final Color rightSelectableColor = paletteColors[rightColorIndex];
 
     final Color selectedColor =
         (fractionalTouchPosition - leftColorIndex) <= 0.5
             ? leftSelectableColor
             : rightSelectableColor;
 
-    final Color spectrumColor = Color.lerp(leftSelectableColor.color,
-        rightSelectableColor.color, fractionalTouchPosition - leftColorIndex);
+    final Color spectrumColor = Color.lerp(leftSelectableColor,
+        rightSelectableColor, fractionalTouchPosition - leftColorIndex);
   }
 
   @override
@@ -150,7 +153,7 @@ class _ColorPickerState extends State<ColorPicker> {
         _selectColors(details.localPosition);
       },
       child: ColorBar(
-        colors: colors,
+        colors: paletteColors,
       ),
     );
   }
