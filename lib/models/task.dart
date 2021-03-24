@@ -1,15 +1,17 @@
+import 'package:flutter/cupertino.dart';
+
 class Task {
   final int id;
   final String title;
-  final String description;
+  final Color projColor;
 
-  Task({this.id, this.title, this.description});
+  Task({this.id, this.title, this.projColor});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'description': description,
+      'projColor': projColor,
     };
   }
 }

@@ -18,7 +18,8 @@ class _ProjecttodosState extends State<Projecttodos> {
 
   int _taskId = 0;
   String _taskTitle = "";
-
+  Color _projColor = Colors.transparent;
+  Color projBlobInvisible = Colors.transparent;
   FocusNode _titleFocus;
   FocusNode _todoFocus;
 
@@ -30,6 +31,8 @@ class _ProjecttodosState extends State<Projecttodos> {
       _contentVisible = true;
       _taskTitle = widget.task.title;
       _taskId = widget.task.id;
+
+      _projColor = widget.task.projColor;
     }
 
     _titleFocus = FocusNode();
@@ -52,6 +55,15 @@ class _ProjecttodosState extends State<Projecttodos> {
         child: Container(
           child: Stack(
             children: [
+              Align(
+                alignment: Alignment(0.0, -0.9),
+                child: Image(
+                  image: AssetImage(
+                    'assets/images/proj_blob.png',
+                  ),
+                  color: _projColor ?? projBlobInvisible,
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -100,7 +112,6 @@ class _ProjecttodosState extends State<Projecttodos> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25.0,
-                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -109,7 +120,13 @@ class _ProjecttodosState extends State<Projecttodos> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(15.0),
-                    child: ColorPicker(),
+                    child: ColorPicker(
+                      onColorSelected: (Color spectrumColor) {
+                        setState(() {
+                          _projColor = spectrumColor;
+                        });
+                      },
+                    ),
                   ),
                   FutureBuilder(
                     initialData: [],

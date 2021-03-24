@@ -10,7 +10,7 @@ class DatabaseHelper {
       join(await getDatabasesPath(), 'todo.db'),
       onCreate: (db, version) async {
         await db.execute(
-            "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT)");
+            "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, projColor TEXT)");
         await db.execute(
             "CREATE TABLE todo(id INTEGER PRIMARY KEY, taskId INTEGER, title TEXT, isDone INTEGER)");
 
@@ -22,6 +22,7 @@ class DatabaseHelper {
 
   Future<int> insertTask(Task task) async {
     int taskId = 0;
+
     Database _db = await database();
     await _db
         .insert('tasks', task.toMap(),
@@ -35,6 +36,12 @@ class DatabaseHelper {
     await _db.rawUpdate("UPDATE tasks SET title = '$title' WHERE id = '$id'");
   }
 
+  Future<void> updateProjColor(int id, String projColor) async {
+    Database _db = await database();
+    await _db.rawUpdate(
+        "UPDATE tasks SET projColor = '$projColor' WHERE id = '$id'");
+  }
+
   Future<void> insertTodo(Todo todo) async {
     Database _db = await database();
     await _db.insert('todo', todo.toMap(),
@@ -46,9 +53,10 @@ class DatabaseHelper {
     List<Map<String, dynamic>> taskMap = await _db.query('tasks');
     return List.generate(taskMap.length, (index) {
       return Task(
-          id: taskMap[index]['id'],
-          title: taskMap[index]['title'],
-          description: taskMap[index]['description']);
+        id: taskMap[index]['id'],
+        title: taskMap[index]['title'],
+        projColor: taskMap[index]['projColor'],
+      );
     });
   }
 

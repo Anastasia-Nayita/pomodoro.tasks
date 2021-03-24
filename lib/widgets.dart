@@ -89,8 +89,11 @@ class ProjectCard extends StatelessWidget {
 }
 
 class ColorPicker extends StatefulWidget {
+  ColorPicker({
+    this.onColorSelected,
+  });
 
-  final Function(Color spectrumColor, Color selectedColor)
+  final Function(Color spectrumColor) onColorSelected;
 
   @override
   _ColorPickerState createState() => _ColorPickerState();
@@ -98,11 +101,11 @@ class ColorPicker extends StatefulWidget {
 
 class _ColorPickerState extends State<ColorPicker> {
   final List<Color> paletteColors = [
-    Color(0xFFB1B5A7),
     Color(0xFFF2F3CC),
-    Color(0xFFEECCDC),
+    Color(0xFFB1B5A7),
     Color(0xFFBD9744),
     Color(0xFFFF7C58),
+    Color(0xFFEECCDC),
     Color(0xFFCEF6FF),
     Color(0xFF6C97B5),
     Color(0xFF00C9B0),
@@ -114,33 +117,18 @@ class _ColorPickerState extends State<ColorPicker> {
   ];
 
   void _selectColors(Offset touchPosition) {
-    final int colorCount = paletteColors.length;
+    if (widget.onColorSelected == null) {
+      return;
+    }
+
     final RenderBox renderBox = context.findRenderObject();
-    final double blobDiameter = renderBox.size.height;
-    final double blobRadius = blobDiameter / 2;
-    final double separatorBlob =
-        (renderBox.size.width - (colorCount * blobDiameter)) / (colorCount - 1);
 
-    final double touchX =
-        touchPosition.dx.clamp(0.0, renderBox.size.width.toDouble());
+    final ColorBlobSpectrum colorBlobSpectrum =
+        ColorBlobSpectrum.fromPhysicalDimensions(
+            size: renderBox.size, paletteColors: paletteColors);
 
-    final double fractionalTouchPosition =
-        ((touchX - blobRadius) / (blobDiameter + separatorBlob))
-            .clamp(0.0, (colorCount - 1).toDouble());
-
-    final int leftColorIndex = fractionalTouchPosition.floor();
-    final Color leftSelectableColor = paletteColors[leftColorIndex];
-
-    final int rightColorIndex = fractionalTouchPosition.ceil();
-    final Color rightSelectableColor = paletteColors[rightColorIndex];
-
-    final Color selectedColor =
-        (fractionalTouchPosition - leftColorIndex) <= 0.5
-            ? leftSelectableColor
-            : rightSelectableColor;
-
-    final Color spectrumColor = Color.lerp(leftSelectableColor,
-        rightSelectableColor, fractionalTouchPosition - leftColorIndex);
+    widget.onColorSelected(
+        colorBlobSpectrum.calculateSpectrumColor(touchPosition.dx));
   }
 
   @override
@@ -156,6 +144,51 @@ class _ColorPickerState extends State<ColorPicker> {
         colors: paletteColors,
       ),
     );
+  }
+}
+
+class ColorBlobSpectrum {
+  factory ColorBlobSpectrum.fromPhysicalDimensions({
+    @required Size size,
+    @required List<Color> paletteColors,
+  }) {
+    return ColorBlobSpectrum(
+      blobDiameter: size.height,
+      spectrumWidth: size.width,
+      paletteColors: paletteColors,
+    );
+  }
+
+  ColorBlobSpectrum({
+    @required this.blobDiameter,
+    @required this.spectrumWidth,
+    @required this.paletteColors,
+  }) : blobRadius = blobDiameter / 2;
+
+  final double blobDiameter;
+  final double blobRadius;
+  final double spectrumWidth;
+  final List<Color> paletteColors;
+
+  Color calculateSpectrumColor(double touchX) {
+    final int colorCount = paletteColors.length;
+    final double separatorBlob =
+        (spectrumWidth - (colorCount * blobDiameter)) / (colorCount - 1);
+
+    final double position = touchX.clamp(0.0, spectrumWidth);
+
+    final double fractionalTouchPosition =
+        ((position - blobRadius) / (blobDiameter + separatorBlob))
+            .clamp(0.0, (colorCount - 1).toDouble());
+
+    final int leftColorIndex = fractionalTouchPosition.floor();
+    final Color leftSelectableColor = paletteColors[leftColorIndex];
+
+    final int rightColorIndex = fractionalTouchPosition.ceil();
+    final Color rightSelectableColor = paletteColors[rightColorIndex];
+
+    return Color.lerp(leftSelectableColor, rightSelectableColor,
+        fractionalTouchPosition - leftColorIndex);
   }
 }
 
@@ -207,7 +240,7 @@ class TodoWidget extends StatelessWidget {
             child: Text(
               text ?? '(Unnamed Todo)',
               style: TextStyle(
-                color: isDone ? Colors.white54 : Colors.white,
+                color: isDone ? Colors.black45 : Colors.black,
                 fontSize: 16.0,
                 fontWeight: isDone ? FontWeight.w300 : FontWeight.w600,
                 decoration:
