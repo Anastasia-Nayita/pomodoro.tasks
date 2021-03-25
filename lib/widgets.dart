@@ -93,6 +93,21 @@ class ColorPicker extends StatefulWidget {
     this.onColorSelected,
   });
 
+  final List<Color> paletteColors = [
+    Color(0xFFF2F3CC),
+    //Color(0xFFB1B5A7),
+    Color(0xFFBD9744),
+    // Color(0xFFFF7C58),
+    // Color(0xFFEECCDC),
+    Color(0xFFCEF6FF),
+    Color(0xFF6C97B5),
+    Color(0xFF00C9B0),
+    Color(0xFF005B4C),
+    //Color(0xFF005C78),
+    Color(0xFF845EC2),
+    // Color(0xFFD65DB1),
+    Color(0xFFFF6F91)
+  ];
   final Function(Color spectrumColor) onColorSelected;
 
   @override
@@ -100,22 +115,6 @@ class ColorPicker extends StatefulWidget {
 }
 
 class _ColorPickerState extends State<ColorPicker> {
-  final List<Color> paletteColors = [
-    Color(0xFFF2F3CC),
-    Color(0xFFB1B5A7),
-    Color(0xFFBD9744),
-    Color(0xFFFF7C58),
-    Color(0xFFEECCDC),
-    Color(0xFFCEF6FF),
-    Color(0xFF6C97B5),
-    Color(0xFF00C9B0),
-    Color(0xFF005B4C),
-    Color(0xFF005C78),
-    Color(0xFF845EC2),
-    Color(0xFFD65DB1),
-    Color(0xFFFF6F91)
-  ];
-
   void _selectColors(Offset touchPosition) {
     if (widget.onColorSelected == null) {
       return;
@@ -125,7 +124,7 @@ class _ColorPickerState extends State<ColorPicker> {
 
     final ColorBlobSpectrum colorBlobSpectrum =
         ColorBlobSpectrum.fromPhysicalDimensions(
-            size: renderBox.size, paletteColors: paletteColors);
+            size: renderBox.size, paletteColors: widget.paletteColors);
 
     widget.onColorSelected(
         colorBlobSpectrum.calculateSpectrumColor(touchPosition.dx));
@@ -140,10 +139,68 @@ class _ColorPickerState extends State<ColorPicker> {
       onHorizontalDragUpdate: (DragUpdateDetails details) {
         _selectColors(details.localPosition);
       },
-      child: ColorBar(
-        colors: paletteColors,
+      child: ClipPath(
+        clipper: BlobSpectrumClipper(
+          colorCount: widget.paletteColors.length,
+          lineThickness: 10,
+        ),
+        child: ColorBar(
+          colors: widget.paletteColors,
+        ),
       ),
     );
+  }
+}
+
+class BlobSpectrumClipper extends CustomClipper<Path> {
+  BlobSpectrumClipper({
+    @required this.colorCount,
+    @required this.lineThickness,
+  });
+
+  final int colorCount;
+  final double lineThickness;
+
+  @override
+  Path getClip(Size size) {
+    final double blobDiameter = size.height;
+    final double separatorSpace =
+        (size.width - (colorCount * blobDiameter)) / (colorCount - 1);
+
+    Path path = Path();
+    _addHorizontalLine(path, size, lineThickness);
+    for (int i = 0; i < colorCount; ++i) {
+      _addBlob(path, size, blobDiameter, separatorSpace, i);
+    }
+    return path;
+  }
+
+  void _addHorizontalLine(
+      Path path, Size availableSpace, double lineThickness) {
+    path.addRect(Rect.fromLTWH(
+      0,
+      (availableSpace.height - lineThickness) / 2,
+      availableSpace.width,
+      lineThickness,
+    ));
+  }
+
+  void _addBlob(Path path, Size availableSpace, double blobDiameter,
+      double separatorSpace, int index) {
+    final blobRadius = blobDiameter / 2;
+
+    path.addOval(Rect.fromCircle(
+      center: Offset(
+        blobRadius + (index * (blobDiameter + separatorSpace)),
+        availableSpace.height / 2,
+      ),
+      radius: blobRadius,
+    ));
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
   }
 }
 
