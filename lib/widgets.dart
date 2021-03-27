@@ -64,7 +64,7 @@ class ProjectCard extends StatelessWidget {
           topLeft: Radius.circular(15.0),
           topRight: Radius.circular(15.0),
         ),
-        // color: generateRandomColor(),
+        //color: generateRandomColor(),
         boxShadow: [
           BoxShadow(
             color: Colors.black45,

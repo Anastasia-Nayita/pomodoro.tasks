@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -36,7 +38,7 @@ class DatabaseHelper {
     await _db.rawUpdate("UPDATE tasks SET title = '$title' WHERE id = '$id'");
   }
 
-  Future<void> updateProjColor(int id, String projColor) async {
+  Future<void> updateProjColor(int id, Color projColor) async {
     Database _db = await database();
     await _db.rawUpdate(
         "UPDATE tasks SET projColor = '$projColor' WHERE id = '$id'");

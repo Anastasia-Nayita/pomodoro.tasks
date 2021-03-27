@@ -121,7 +121,9 @@ class _ProjecttodosState extends State<Projecttodos> {
                   Padding(
                     padding: EdgeInsets.all(15.0),
                     child: ColorPicker(
-                      onColorSelected: (Color spectrumColor) {
+                      onColorSelected: (Color spectrumColor) async {
+                        await _dbHelper.updateProjColor(_taskId, _projColor);
+                        print("Updated the projColor");
                         setState(() {
                           _projColor = spectrumColor;
                         });
