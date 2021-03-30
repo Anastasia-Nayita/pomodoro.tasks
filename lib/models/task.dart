@@ -7,7 +7,7 @@ class Task {
 
   Task({this.id, this.title, this.projColor});
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       'id': id,
       'title': title,

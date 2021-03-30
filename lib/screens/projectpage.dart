@@ -26,6 +26,7 @@ class _ProjectpageState extends State<Projectpage> {
                   initialData: [],
                   future: _dbHelper.getTasks(),
                   builder: (context, snapshot) {
+                    print(snapshot);
                     return ScrollConfiguration(
                       behavior: NoScrollGlow(),
                       child: ListView.builder(

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:what_todo/main.dart';
 
 import 'models/task.dart';
 import 'models/todo.dart';
@@ -42,6 +43,7 @@ class DatabaseHelper {
     Database _db = await database();
     await _db.rawUpdate(
         "UPDATE tasks SET projColor = '$projColor' WHERE id = '$id'");
+    print("$projColor");
   }
 
   Future<void> insertTodo(Todo todo) async {
@@ -52,7 +54,7 @@ class DatabaseHelper {
 
   Future<List<Task>> getTasks() async {
     Database _db = await database();
-    List<Map<String, dynamic>> taskMap = await _db.query('tasks');
+    List<Map<dynamic, dynamic>> taskMap = await _db.query('tasks');
     return List.generate(taskMap.length, (index) {
       return Task(
         id: taskMap[index]['id'],

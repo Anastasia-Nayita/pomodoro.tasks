@@ -53,8 +53,8 @@ class IntroWidget extends StatelessWidget {
 
 class ProjectCard extends StatelessWidget {
   final String title;
-
-  ProjectCard({this.title});
+  final Color projColor;
+  ProjectCard({this.title, this.projColor});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class ProjectCard extends StatelessWidget {
           topLeft: Radius.circular(15.0),
           topRight: Radius.circular(15.0),
         ),
-        //color: generateRandomColor(),
+        color: projColor ?? Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black45,
